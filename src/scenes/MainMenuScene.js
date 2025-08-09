@@ -1,4 +1,5 @@
 // src/scenes/MainMenuScene.js
+// This scene is the main menu of the game.
 import Phaser from 'phaser';
 
 export default class MainMenuScene extends Phaser.Scene {
@@ -21,15 +22,26 @@ export default class MainMenuScene extends Phaser.Scene {
 
   // The preload() method has been moved to PreloadScene.js
   // All assets are now loaded before this scene starts.
+  // IMPORTANT: You'll need to add the new images to your PreloadScene.js file!
+  // Add these lines to your PreloadScene's preload method:
+  // this.load.image('title_bg', 'src/assets/images/title_bg.png');
+  // this.load.image('title_logo', 'src/assets/images/title_logo.png');
 
   create() {
     const { width, height } = this.cameras.main;
 
-    // Background as tileSprite for parallax-scrolling it lightly
-    // 'universityBg' is loaded in the PreloadScene
-    this.bg = this.add.tileSprite(width / 2, height / 2, width, height, 'universityBg').setDepth(-10);
+    // --- NEW: Add the new static background image ---
+    // The previous background tileSprite has been replaced with the new image.
+    // 'title_bg' is the key for the new background image.
+    this.bg = this.add.image(width / 2, height / 2, 'title_bg').setDepth(-10);
 
-    // Particle emitter near bottom for drifting motes
+    // Scale the background image to fill the entire screen while maintaining its aspect ratio.
+    const scaleX = width / this.bg.width;
+    const scaleY = height / this.bg.height;
+    const scale = Math.max(scaleX, scaleY);
+    this.bg.setScale(scale).setScrollFactor(0);
+
+    // Particles are a great effect, so we'll keep them.
     // 'particle' is loaded in the PreloadScene
     this.particles = this.add.particles('particle');
     this.emitter = this.particles.createEmitter({
@@ -43,9 +55,10 @@ export default class MainMenuScene extends Phaser.Scene {
       frequency: 250,
     });
 
-    // Add glowing logo (from embedded base64), breathing tween
-    // 'gameLogo' is loaded in the PreloadScene
-    this.logo = this.add.image(width / 2, height * 0.23, 'gameLogo').setScale(3);
+    // --- NEW: Add the new title logo image ---
+    // The previous logo is replaced with the new, more stylized one.
+    // We will keep the breathing tween on this new logo for a cool effect.
+    this.logo = this.add.image(width / 2, height * 0.3, 'title_logo');
     this.logoTween = this.tweens.add({
       targets: this.logo,
       alpha: { from: 1, to: 0.7 },
@@ -55,24 +68,9 @@ export default class MainMenuScene extends Phaser.Scene {
       ease: 'Sine.easeInOut',
     });
 
-    // Title & subtitle
-    this.titleText = this.add.text(width / 2, height * 0.36, 'Veil of Secrets', {
-      fontFamily: 'Georgia',
-      fontSize: '56px',
-      fontWeight: 'bold',
-      color: '#F0E68C',
-      stroke: '#000',
-      strokeThickness: 6,
-    }).setOrigin(0.5);
-
-    this.subtitleText = this.add.text(width / 2, height * 0.44, 'A Name of the Wind Metroidvania', {
-      fontFamily: 'Georgia',
-      fontSize: '22px',
-      fontStyle: 'italic',
-      color: '#DDD',
-      stroke: '#000',
-      strokeThickness: 2,
-    }).setOrigin(0.5);
+    // --- REMOVED: The title and subtitle text are now part of the new title image ---
+    // The 'Veil of Secrets' and 'A Name of the Wind Metroidvania' text objects
+    // have been removed since the new art asset contains this information.
 
     // Lore quote cycling at bottom
     this.quoteText = this.add.text(width / 2, height * 0.86, this.loreQuotes[0], {
@@ -434,7 +432,8 @@ export default class MainMenuScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-    this.bg.tilePositionX += 0.03 * (delta / 16.67);
+    // We are no longer using a tileSprite, so we don't need to update its position.
+    // this.bg.tilePositionX += 0.03 * (delta / 16.67);
 
     const w = this.scale.width;
     const h = this.scale.height;
