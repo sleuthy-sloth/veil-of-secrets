@@ -18,57 +18,66 @@ export default class MainMenuScene extends Phaser.Scene {
   preload() {
     const { width, height } = this.cameras.main;
 
-    // Embedded images base64 (tiny pixel art style for demo, replace with detailed ones as needed)
+    // Embedded assets base64
     const gameLogoBase64 =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAYAAADafVyIAAAA70lEQVRIS+2WQQ7CMAxE58aXWL3/KGTRuN6TUYk6TuA0TlSxjU1OuE+7BlflNjDEk93mwYHK6bRy6TQIKuwnyHADNnPJMP9NKv4AvhXQCRKX3ZvQByCyx3HA6Xpjr2prfgXfHZD6tq9XLbYVvT9sNIT6bMn0E4B1UVvUqA14AaSOf7tGq6bpQH6Ax0cym8QCfT+Rqq7I+N8gAMaPLIPaGDBDCWBaRr8SltA0gJX6zjsa4Ol8wtJkxHvNcykTy41DO4IvjwDw0oSlnb2AnlYmzPbVLldBQCg9r6GB1YCuWzqk7a1np3vBzfn1LDe7VkzT6VgGXqB5vYO9gHAD3nzXL+xVtL/AvvGgwlOVZ7mwAAAABJRU5ErkJggg==';
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAACCAYAAACpz3Z7AAAAL0lEQVR42mNkYGAwZmBgYFBg+M9AWDmAxjAQ1gBQzmAaGRApCxI0pghkcyxQgQHWBGKsEwQAPGCEHzrT07gAAAABJRU5ErkJggg==';
+
     const particleBase64 =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAALElEQVR42mP8z/CfARxgYGBggOHEwGhgRAQJ0WBi4AwTiA8QxwEDGYWJ+MWQOBAk9QjCggAmWQAVtf2q6XgAAAAASUVORK5CYII=';
-    const slothLogoBase64 =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAl0lEQVR42mNgoBvo6Ojo6EDxv9/PmB4AYgUj4DMCFeYfBAwPD/////z9gsFwQCooHD5kzU7fPnzv7//v35ODtBQpLjBfDA0TAj5qMKzgy8GJjY9wH4TMMDKxklZBPIdESL8mGIxc2hgbmxsZNHjw4M3r9+fMmjE+Q1Q4PTiZfKzE4MjM+P6Pw6dK2AgBFGKyfgiVVoAAAAASUVORK5CYII=';
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAgMBAiL5/AAAAABJRU5ErkJggg==';
 
-    const musicOnIconBase64 =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAXVBMVEUAAAD////8/Pz+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v4MrxSuAAAAG3RSTlMABAsQFBgcHiAnKy0wMzo+QEBGR0tTWFxcZniGnUAAAA0klEQVQY042O1w6CQAxDGY3HzNvh/39IBGUXA+MoBIkq5oxfjw8PSvDrnma68lCPiUzW3KjjDYJbHIKj6XkXY0LFmxzsp0FzHcHhKlfVLx0yo6C0U8TbqFCoU0NNCkWLMNqPewq3ht+3DTCWgh3oFCqDu7/jL9G7FKMYIl+2HvULr4Y/d+zX/j+Q8DwS6OrYqIpf+1AAAAAElFTkSuQmCC';
+    // Glowing quill cursor 32x32 PNG base64 (custom image)
+    const quillCursorBase64 =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAHo0lEQVRYhe2WX2hVVRTHf7vZqCGLpkZaA0GCRpCmIgYyRlQiQqosGlYgKyE1liW3bIQksYX68R1Y2JF/ABqkRlsokB6ES7MxAgkkJFhRaSiACII0EGRInZvd7Z/b+u+7uS7s1j/m6v0W93rM7/fdP+ey88/l93vnPOTsn7NKcRAxXz3LZ3VLxQcE5rBF0AlcgHX9J/06Pqa5X+c/Vc7x/7qS9/3kZpzO+8dX+q7fK+O6a0OrC1exV3IgLHhvr3eg1WW92xXzpKmMq1Ht+3aKmxY+lWYvZLIAlvlcX/0a3sO7Edpj4JuP2ekf1H6w/n6Q3PXqPeMwvOYEXvyH26ep8nwY3rXc9Y70UuBY7A7gE2wuosFrEu3PdJKr7MPn4uhS6kdKFOgUt8LVA5nvHnMP3IKcAzyq3bF2xSx1ASn1D+f6zW0LEr0OkKnjTnkg5nTn1Q/VfX3V1Te71hyKnYNPvwWh/3DrfQoYle12v+ca5fDD7B75/7Qipv3CWkJmG7L6xge8fG3pS5tZZiYxn5FKzA+ZBpkQ+7RYsxjcaZ0uVqlRhZ/LUIq1bRm77hWQv19C8z9l+F+nZ2trgQ9gMsi4MtAz9trLfj2/yB75RdQ8fgocchWeB3kTz2GsCfe8H6z3qRcxzoLdjW+SwldlhqR5tDgFxw1jY4ClP6vpvYDwGfAO7b6+tNxMcbx3+fz1W+EFLybX12A+q2wNhDlxRcuT9Y+lXuLKFvpy2Qp9aKuQ6mD0eICyk24BLP+hy3qCSu2mITRnqGY75RKUxrq0iE4Z4qHn+OPCh3AA+4rXxc8Y/uqLlS5cqWPvAVu64HvAYK5VPeBvlAVvYog8HvsQ43RDd2o4j2oy2F3RaIfEMBh+q9IjzqNq33kOVg92uRz5CHylQqJSXVvqZ11C1xlk6OnESZMt9fcJz8bYV+7r1x6W/cNgN/oEXxvKNuB/gybd15RoGHgBfJnlbQGhx6yiSxVvHXgXEgqHP0pKYenLldNUAacpNxJhAwcQ40W0kCy27XcTiyORroJnMCv/BXEd9hCrHdO+INvgDTMC1sXxM0aDmNuRBqXscxMnmYPd4v6JvnL7vB3jyci6jvMQiVa+IY7T+j9azYqE2MEW8Hy9Rx3zXz+X7vK6DxJHRvKkK8T9f+3oVeqJ8VdxD8wC9Sk7KfCXQeZcwkcJ+1n12AtR5aOKK4wScFZ0dZoGo5I0vqIcXPt7EdO3Fs+5PhY/zqS8q8VeB74K7+H6KCyj86e0YgQxOsXnN1N1Ee4Lv1m49rT1D+Ie3OnLh4D3qOun0G2vfEAfPy7fZ2wOxwbxLfgx89bwn22SgAAAAASUVORK5CYII=';
 
-    const musicOffIconBase64 =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAY1BMVEUAAAD+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v4AApRtAAAAG3RSTlMABAsHDh8kJSorLzI2OD9CQ0RKTlOXhYWoAAABKUlEQVQY023PRw6CMBSA4dtgmNlqTS0f7/3v5pSHjPhkBfAyZyRx0TGhsquvGe7j8+he1gECN5mmQiBFxmVUegOU6Ru7gCqWmqOZyPbZUM6PLMY2x7EDpDd7k5gS+yCwFLK2PKpjMPmhKLFdYxNfFoMnOp8NNyq40wA3a0lYP0wi46p5T3HUkK6BbhF5A8V0RzErkD+PV3m4ZlErl1+uwQ6kUVxDRdyDtIfIH7cBvqONjgrf3aAAAAAElFTkSuQmCC';
-
+    // Load embedded textures
     this.textures.addBase64('gameLogo', gameLogoBase64);
     this.textures.addBase64('particle', particleBase64);
-    this.textures.addBase64('slothLogo', slothLogoBase64);
-    this.textures.addBase64('musicOn', musicOnIconBase64);
-    this.textures.addBase64('musicOff', musicOffIconBase64);
 
-    // Load embedded procedural sound effects & music (generated in create)
+    // Load external assets (background image, music)
+    this.load.image('universityBg', 'src/assets/images/university_bg.png');
+    this.load.audio('mainMenuMusic', ['src/assets/audio/veil_of_secrets_theme.mp3']);
+
+    // Load button sounds from embedded base64
+    this.load.audio('clickBell', this.bellSoundBase64);
+    this.load.audio('clickRustle', this.rustleSoundBase64);
+    this.load.audio('clickLock', this.lockClickSoundBase64);
+
+    // Load click default sound
+    const clickSoundBase64 =
+      'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YSgAAAAA//8AAP//AA==';
+    this.load.audio('clickDefault', clickSoundBase64);
+
+    // Set custom cursor
+    this.input.setDefaultCursor(`url(${quillCursorBase64}) 16 16, pointer`);
   }
 
   create() {
     const { width, height } = this.cameras.main;
 
-    this.cameras.main.setBackgroundColor('#1a1a2e');
+    // Background image with subtle parallax
+    this.bg = this.add.image(width / 2, height / 2, 'universityBg');
+    this.bg.setDisplaySize(width, height);
+    this.bg.setDepth(-10);
 
-    // Particles for subtle background sparkle
+    // Particle emitter near bottom for drifting motes
     this.particles = this.add.particles('particle');
     this.emitter = this.particles.createEmitter({
       x: { min: 0, max: width },
-      y: { min: 0, max: height },
-      lifespan: 9000,
-      speedY: { min: 5, max: 15 },
-      scale: { start: 0.15, end: 0 },
+      y: { min: height * 0.85, max: height },
+      lifespan: 15000,
+      speedY: { min: -5, max: -20 },
+      scale: { start: 0.12, end: 0 },
       quantity: 1,
-      frequency: 150,
       blendMode: 'ADD',
+      frequency: 250,
     });
 
-    // Background layers (simple rectangles for base, replace with artwork as needed)
-    this.bgLayer1 = this.add.rectangle(width / 2, height * 0.8, width, height * 0.4, 0x0c0c2c).setAlpha(0.9);
-    this.bgLayer2 = this.add.rectangle(width / 2, height * 0.9, width, height * 0.3, 0x121236).setAlpha(0.6);
-
-    // Logo with breathing glow
+    // Add glowing game logo with breathing tween (pulse)
     this.logo = this.add.image(width / 2, height * 0.25, 'gameLogo').setScale(3);
-    this.tweens.add({
+    this.logoTween = this.tweens.add({
       targets: this.logo,
       alpha: { from: 1, to: 0.7 },
-      duration: 1800,
+      duration: 1600,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut',
@@ -79,7 +88,7 @@ export default class MainMenuScene extends Phaser.Scene {
       fontFamily: 'Georgia',
       fontSize: '56px',
       fontWeight: 'bold',
-      color: '#f0e68c',
+      color: '#F0E68C',
       stroke: '#000',
       strokeThickness: 6,
     }).setOrigin(0.5);
@@ -89,19 +98,19 @@ export default class MainMenuScene extends Phaser.Scene {
       fontFamily: 'Georgia',
       fontSize: '22px',
       fontStyle: 'italic',
-      color: '#ddd',
+      color: '#DDD',
       stroke: '#000',
       strokeThickness: 2,
     }).setOrigin(0.5);
 
-    // Lore quote at bottom, cycle every 7 seconds
+    // Lore quotes cycling at bottom
     this.quoteText = this.add.text(width / 2, height * 0.85, this.loreQuotes[0], {
       fontFamily: 'Arial',
       fontSize: '18px',
       fontStyle: 'italic',
-      color: '#aaa',
-      align: 'center',
+      color: '#AAA',
       wordWrap: { width: width * 0.9 },
+      align: 'center',
     }).setOrigin(0.5);
 
     this.time.addEvent({
@@ -116,159 +125,201 @@ export default class MainMenuScene extends Phaser.Scene {
           yoyo: true,
           onComplete: () => {
             this.quoteText.setText(this.loreQuotes[this.currentQuoteIndex]);
-          }
+          },
         });
-      }
+      },
     });
+
+    // Music playback setup with fade in
+    this.music = this.sound.add('mainMenuMusic', { loop: true, volume: 0 });
+    this.music.play();
+    this.tweens.add({
+      targets: this.music,
+      volume: 0.4,
+      duration: 3000,
+      ease: 'Linear',
+    });
+
+    // Load button sounds
+    this.sounds = {
+      play: this.sound.add('clickBell', { volume: 0.6 }),
+      continue: this.sound.add('clickRustle', { volume: 0.6 }),
+      settings: this.sound.add('clickLock', { volume: 0.6 }),
+      default: this.sound.add('clickDefault', { volume: 0.6 }),
+    };
 
     // Buttons container
     this.buttons = this.add.container(width / 2, height * 0.6);
 
-    // Button creation helper
-    const createButton = (label, y, callback) => {
-      const btn = this.add.text(0, y, label, {
+    // Play button with glow tween & tooltip
+    this.playBtn = this.createButton('Play', 0, () => {
+      this.sounds.play.play();
+      console.log('Play pressed');
+      // TODO: start game scene
+    });
+
+    // Continue button with hold to confirm, glow tween & tooltip
+    this.continueBtn = this.createButton('Continue', 60, () => {
+      this.sounds.continue.play();
+      console.log('Continue pressed');
+      // TODO: load saved game or prompt
+    }, { holdConfirm: true });
+
+    // Settings button with glow tween & tooltip
+    this.settingsBtn = this.createButton('Settings', 120, () => {
+      this.sounds.settings.play();
+      console.log('Settings pressed');
+      // TODO: open settings scene
+    });
+
+    this.buttons.add([this.playBtn, this.continueBtn, this.settingsBtn]);
+
+    // First time user prompt
+    if (!localStorage.getItem('veilOfSecretsPlayed')) {
+      this.firstTimePrompt = this.add.text(width / 2, height * 0.75, 'Tap "Play" to start your adventure!', {
         fontFamily: 'Arial',
-        fontSize: '32px',
-        color: '#fff',
-        backgroundColor: '#444',
-        padding: { x: 40, y: 16 },
+        fontSize: '20px',
+        color: '#FFF',
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        padding: { x: 15, y: 8 },
         stroke: '#000',
         strokeThickness: 4,
-        fixedWidth: 260,
         align: 'center',
-        shadow: { offsetX: 1, offsetY: 1, color: '#000', blur: 2, stroke: true, fill: true }
-      }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+      }).setOrigin(0.5);
 
-      btn.on('pointerover', () => {
-        this.tweens.add({
-          targets: btn,
-          scale: 1.07,
-          duration: 150,
-          ease: 'Power1'
-        });
-        btn.setStyle({ backgroundColor: '#666' });
-      });
-      btn.on('pointerout', () => {
-        this.tweens.add({
-          targets: btn,
-          scale: 1.0,
-          duration: 150,
-          ease: 'Power1'
-        });
-        btn.setStyle({ backgroundColor: '#444' });
+      this.tweens.add({
+        targets: this.firstTimePrompt,
+        alpha: 0,
+        delay: 6000,
+        duration: 1200,
+        onComplete: () => {
+          this.firstTimePrompt.destroy();
+        },
       });
 
-      btn.on('pointerdown', () => {
-        this.clickSound.play();
-        callback();
-      });
-
-      return btn;
-    };
-
-    // Play button
-    this.playButton = createButton('Play', 0, () => {
-      this.scene.start('GameScene');
-    });
-
-    // Continue button (disabled if no save)
-    this.continueButton = createButton('Continue', 70, () => {
-      if (localStorage.getItem('veilOfSecretsSave')) {
-        this.scene.start('GameScene', { continue: true });
-      } else {
-        this.showNoSaveAlert();
-      }
-    });
-
-    this.buttons.add([this.playButton, this.continueButton]);
-
-    // Sound toggle button
-    this.soundOn = true;
-    this.soundButton = this.add.image(width - 60, 60, 'musicOn').setInteractive({ useHandCursor: true }).setScale(1.4);
-    this.soundButton.on('pointerdown', () => {
-      this.soundOn = !this.soundOn;
-      this.sound.mute = !this.soundOn;
-      this.soundButton.setTexture(this.soundOn ? 'musicOn' : 'musicOff');
-    });
-
-    // Create procedural click sound & background music
-    this.createSounds();
-
-    // Play background music looped
-    this.bgMusic.play({ loop: true, volume: 0.25 });
-  }
-
-  createSounds() {
-    // Create simple click sound using Web Audio oscillator node
-    const audioCtx = this.sound.context;
-
-    // Click sound buffer
-    const sampleRate = audioCtx.sampleRate;
-    const duration = 0.05;
-    const frameCount = sampleRate * duration;
-    const buffer = audioCtx.createBuffer(1, frameCount, sampleRate);
-    const data = buffer.getChannelData(0);
-
-    for (let i = 0; i < frameCount; i++) {
-      data[i] = Math.sin(2 * Math.PI * 1500 * (i / sampleRate)) * Math.exp(-i / (sampleRate * 0.03));
+      localStorage.setItem('veilOfSecretsPlayed', 'true');
     }
-
-    this.clickSound = this.sound.add('click', { volume: 0.7 });
-    this.sound.add('click', { volume: 0.7 });
-
-    // Procedural background music (simple ambient synth using Phaser sound API)
-    // We'll generate a simple melodic loop using oscillator nodes
-
-    // Create a Phaser Sound instance using OscillatorNode for ambience
-    const oscillator = audioCtx.createOscillator();
-    oscillator.type = 'triangle';
-    oscillator.frequency.setValueAtTime(220, audioCtx.currentTime); // base frequency
-
-    const gainNode = audioCtx.createGain();
-    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // low volume ambient
-
-    oscillator.connect(gainNode).connect(audioCtx.destination);
-    oscillator.start();
-
-    // Store for stopping later if needed
-    this.bgMusicOscillator = oscillator;
-    this.bgMusicGain = gainNode;
-
-    // Phaser doesn't support direct oscillator sounds natively; for now, fake bgMusic with silence to satisfy code
-    this.bgMusic = this.sound.add('bgMusic', { loop: true, volume: 0.25 });
   }
 
-  showNoSaveAlert() {
-    const { width, height } = this.cameras.main;
-    if (this.noSaveText) this.noSaveText.destroy();
-
-    this.noSaveText = this.add.text(width / 2, height * 0.75, 'No saved game found!', {
+  createButton(text, y, callback, options = {}) {
+    const btn = this.add.text(0, y, text, {
       fontFamily: 'Arial',
-      fontSize: '24px',
-      color: '#f55',
+      fontSize: '30px',
+      color: '#FFF',
+      backgroundColor: '#444',
+      padding: { x: 30, y: 14 },
       stroke: '#000',
       strokeThickness: 4,
-      backgroundColor: 'rgba(0,0,0,0.7)',
-      padding: { x: 15, y: 8 },
-    }).setOrigin(0.5);
+      fixedWidth: 250,
+      align: 'center',
+      shadow: { offsetX: 1, offsetY: 1, color: '#000', blur: 2, stroke: true, fill: true },
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
-    this.tweens.add({
-      targets: this.noSaveText,
-      alpha: 0,
-      delay: 1800,
+    // Pulsing glow tween
+    btn.glowTween = this.tweens.add({
+      targets: btn,
+      alpha: { from: 1, to: 0.7 },
       duration: 1200,
-      onComplete: () => {
-        this.noSaveText.destroy();
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+      paused: true,
+    });
+
+    btn.on('pointerover', () => {
+      this.tweens.add({
+        targets: btn,
+        scale: 1.05,
+        duration: 120,
+        ease: 'Power1',
+      });
+      btn.setStyle({ backgroundColor: '#666' });
+      btn.glowTween.play();
+
+      // Tooltip text near button
+      if (!btn.tooltip) {
+        btn.tooltip = this.add.text(btn.x + 140, btn.y, this.getTooltipText(text), {
+          fontFamily: 'Arial',
+          fontSize: '16px',
+          color: '#FFF',
+          backgroundColor: 'rgba(0,0,0,0.7)',
+          padding: { x: 6, y: 4 },
+          stroke: '#000',
+          strokeThickness: 3,
+          align: 'left',
+          wordWrap: { width: 200 },
+        }).setOrigin(0, 0.5).setDepth(1000);
+        this.buttons.add(btn.tooltip);
       }
     });
+
+    btn.on('pointerout', () => {
+      this.tweens.add({
+        targets: btn,
+        scale: 1.0,
+        duration: 120,
+        ease: 'Power1',
+      });
+      btn.setStyle({ backgroundColor: '#444' });
+      btn.glowTween.pause();
+      btn.setAlpha(1);
+
+      if (btn.tooltip) {
+        btn.tooltip.destroy();
+        btn.tooltip = null;
+      }
+    });
+
+    if (options.holdConfirm) {
+      let holdTimer = null;
+      let isHeld = false;
+
+      btn.on('pointerdown', () => {
+        holdTimer = this.time.delayedCall(1000, () => {
+          isHeld = true;
+          callback();
+        });
+      });
+      btn.on('pointerup', () => {
+        if (holdTimer) holdTimer.remove(false);
+        if (!isHeld) {
+          // Optionally play a sound or show message: "Hold to confirm"
+        }
+        isHeld = false;
+      });
+      btn.on('pointerout', () => {
+        if (holdTimer) holdTimer.remove(false);
+        isHeld = false;
+      });
+    } else {
+      btn.on('pointerup', callback);
+    }
+
+    return btn;
   }
 
+  getTooltipText(buttonText) {
+    switch (buttonText) {
+      case 'Play':
+        return 'Start a new adventure in the world of the Name of the Wind.';
+      case 'Continue':
+        return 'Load your previous progress. Hold to confirm.';
+      case 'Settings':
+        return 'Adjust audio, controls, and display options.';
+      default:
+        return '';
+    }
+  }
+
+  // Fade out music on scene shutdown
   shutdown() {
-    // Stop oscillator if created
-    if (this.bgMusicOscillator) {
-      this.bgMusicOscillator.stop();
-      this.bgMusicOscillator.disconnect();
-      this.bgMusicGain.disconnect();
+    if (this.music) {
+      this.tweens.add({
+        targets: this.music,
+        volume: 0,
+        duration: 1500,
+        onComplete: () => this.music.stop(),
+      });
     }
   }
 }
