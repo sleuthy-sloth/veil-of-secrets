@@ -20,11 +20,7 @@ export default class PreloadScene extends Phaser.Scene {
     // These are small, lightweight assets. For larger assets,
     // it's better to load them from separate files.
 
-    // Pixel-art game logo 64x64 PNG base64
-    const gameLogoBase64 =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAACCAYAAACpz3Z7AAAAL0lEQVR42mNkYGAwZmBgYFBg+M9AWDmAxjAQ1gBQzmAaGRApCxI0pghkcyxQgQHWBGKsEwQAPGCEHzrT07gAAAABJRU5ErkJggg==';
-
-    // Pixel-art Sleuthy Sloth Games logo 64x64 PNG base64
+    // Small pixel-art Sleuthy Sloth Games logo 64x64 PNG base64
     const slothLogoBase64 =
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAACCAYAAACpz3Z7AAAAMklEQVR42mNkYGBg+M8w0QAGYAxjAQ1gBQzmBMaEBooioTiQqj1IjBqI4Fg6mg4zQGAAGCoTxjMjIyMBoA4yhUHEEawfAAAAAElFTkC... (truncated for brevity)';
 
@@ -38,7 +34,7 @@ export default class PreloadScene extends Phaser.Scene {
 
     // Small quill cursor PNG base64
     const quillCursorBase64 =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAHo0lEQVRYhe2WX2hVVRTHf7vZqCGLpkZaA0GCRpCmIgYyRlQiQqosGlYgKyE1liW3bIQksYX68R1Y2JF/ABqkRlsokB6ES7MxAgkkJFhRaSiACII0EGRInZvd7Z/b+u+7uS7s1j/m6v0W93rM7/fdP+ey88/l93vnPOTsn7NKcRAxXz3LZ3VLxQcE5rBF0AlcgHX9J/06Pqa5X+d/Vc7x/7qS9/3kZpzO+8dX+q7fK+O6a0OrC1exV3IgLHhvr3eg1WW92xXzpKmMq1Ht+3aKmxY+lWYvZLIAlvlcX/0a3sO7Edpj4JuP2ekf1H6w/n6Q3PXqPeMwvOYEXvyH26ep8nwY3rXc9Y70UuBY7A7gE2wuosFrEu3PdJKr7MPn4uhS6kdKFOgUt8LVA5nvHnMP3IKcAzyq3bF2xSx1ASn1D+f6zW0LEr0OkKnjTnkg5nTn1Q/VfX3V1Te71hyKnYNPvwWh/3DrfQoYle12v+ca5fDD7B75/7Qipv3CWkJmG7L6xge8fG3pS5tZZiYxn5FKzA+ZBpkQ+7RYsxjcaZ0uVqlRhZ/LUIq1bRm77hWQv19C8z9l+F+nZ2trgQ9gMsi4MtAz9trLfj2/yB75RdQ8fgocchWeB3kTz2GsCfe8H6z3qRcxzoLdjW+SwldlhqR5tDgFxw1jY4ClP6vpvYDwGfAO7b6+tNxMcbx3+fz1W+EFLybX12A+q2wNhDlxRcuT9Y+lXuLKFvpy2Qp9aKuQ6mD0eICyk24BLP+hy3qCSu2mITRnqGY75RKUxrq0iE4Z4qHn+OPCh3AA+4rXxc8Y/uqLlS5cqWPvAVu64HvAYK5VPeBvlAVvYog8HvsQ43RDd2o4j2oy2F3RaIfEMBh+q9IjzqNq33kOVg92uRz5CHylQqJSXVvqZ11C1xlk6OnESZMt9fcJz8bYV+7r1x6W/cNgN/oEXxvKNuB/gybd15RoGHgBfJnlbQGhx6yiSxVvHXgXEgqHP0pKYenLldNUAacpNxJhAwcQ40W0kCy27XcTiyORroJnMCv/BXEd9hCrHdO+INvgDTMC1sXxM0aDmNuRBqXscxMnmYPd4v6JvnL7vB3jyci6jvMQiVa+IY7T+j9azYqE2MEW8Hy9Rx3zXz+X7vK6DxJHRvKkK8T9f+3oVeqJ8VdxD8wC9Sk7KfCXQeZcwkcJ+1n12AtR5aOKK4wScFZ0dZoGo5I0vqIcXPt7EdO3Fs+5PhY/zqS8q8VeB74K7+H6KCyj86e0YgQxOsXnN1N1Ee4Lv1m49rT1D+Ie3OnLh4D3qOun0G2vfEAfPy7fZ2wOxwbxLfgx89bwn22SgAAAAASUVORK5CYII=';
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAHo0lEQVRYhe2WX2hVVRTHf7vZqCGLpkZaA0GCRpCmIgYyRlQiQqosGlYgKyE1liW3bIQksYX68R1Y2JF/ABqkRlsokB6ES7MxAgkkJFhRaSiACII0EGRInZvd7Z/b+u+7uS7s1j/m6v0W93rM7/fdP+ey88/l93vnPOTsn7NKcRAxXz3LZ3VLxQcE5rBF0AlcgHX9J/06Pqa5X+d/Vc7x/7qS9/3kZpzO+8dX+q7fK+O6a0OrC1exV3IgLHhvr3eg1WW92xXzpKmMq1Ht+3aKmxY+lWYvZLIAlvlcX/0a3sO7Edpj4JuP2ekf1H6w/n6Q3PXqPeMwvOYEXvyH26ep8nwY3rXc9Y70UuBY7A7gE2wuosFrEu3PdJKr7MPn4uhS6kdKFOgUt8LVA5nvHnMP3IKcAzyq3bF2xSx1ASn1D+f6zW0LEr0OkKnjTnkg5nTn1Q/VfX3V1Te71hyKnYNPvwWh/3DrfQoYle12v+ca5fDD7B75/7Qipv3CWkJmG7L6xge8fG3pS5tZZiYxn5FKzA+ZBpkQ+7RYsxjcaZ0uVqlRhZ/LUIq1bRm77hWQv19C8z9l+F+nZ2trgQ9gMsi4MtAz9trLfj2/yB75RdQ8fgocchWeB3kTz2GsCfe8H6z3qRcxzoLdjW+SwldlhqR5tDgFxw1jY4ClP6vpvYDwGfAO7b6+tNxMcbx3+fz1W+EFLybX12A+q2wNhDlxRcuT9Y+lXuLKFvpy2Qp9aKuQ6mD0eICyk24BLP+hy3qCSu2mITRnqGY75RKUxrq0iE4Z4qHn+OPCh3AA+4rXxc8Y/uqLlS5cqWPvAVu64HvAYK5VPeBvlAVvYog8HvsQ43RDd2o4j2oy2F3RaIfEMBh+q9IjzqNq33kOVg92uRz5CHylQqJSXVvqZ11C1xlk6OnESZMt9fcJz8bYV+7r1x6W/cNgN/oEXxvKNuB/gybd15RoGHgBfJnlbQGhx6yiSxVvHXgXEgqHP0pKYenLldNUAacpNxJhAwcQ40W0kCy27XcTiyORroJnMCv/BXEd9hCrHdO+INvgDTMC1sXxM0aDmNuRBqXscxMnmYPd4v6JvnL7vB3jyci6jvMQiVa+IY7T+j9azYqE2MEW8Hy9Rx3zXz+X7vK6DxJHRvKkK8T9f+3oVeqJ8VdxD8wC9Sk7KfCXQeZcwkcJ+1n12AtR5aOKu4wScFZ0dZoGo5I0vqIcXPt7EdO3Fs+5PhY/zqS8q8VeB74K7+H6KCyj86e0YgQxOsXnN1N1Ee4Lv1m49rT1D+Ie3OnLh4D3qOun0G2vfEAfPy7fZ2wOxwbxLfgx89bwn22SgAAAAASUVORK5CYII=';
 
     // Small SFX base64 snippets
     const bellSoundBase64 = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAAAB3AQACABAAZGF0YRAAAAAA';
@@ -51,7 +47,7 @@ export default class PreloadScene extends Phaser.Scene {
       'data:audio/wav;base64,UklGRtQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YT8AAABdWlM9PENMUU1RUUtMUklNTFVRV1hRU1ZUVFNNVFJTVVJYVVRDVVZPUkZTVlNUUlZUVlNUUlJVVVNUUlVUVlNUUlZUVlNUUlJRVk1RUlpSUlNUUlRUVlNUUlJVUVNVU1JVUlZTVlNUUlJRVk1RU1N... (truncated for brevity)';
     
     // Add images as textures from Base64
-    this.textures.addBase64('gameLogo', gameLogoBase64);
+    // NOTE: 'gameLogo' is removed because the new title image contains the logo.
     this.textures.addBase64('slothLogo', slothLogoBase64);
     this.textures.addBase64('spinner', spinnerBase64);
     this.textures.addBase64('particle', particleBase64);
@@ -64,11 +60,17 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.audio('clickDefault', clickDefaultBase64);
 
     // === USER-PROVIDED ASSETS (from file uploads) ===
-    // Load the main menu background image
-    this.load.image('universityBg', 'uploaded:image.png-723f1b5c-5518-48e7-a0f9-2562c82b8c60');
+    // Load the new main menu background and title screen images.
+    this.load.image('title_bg', 'src/assets/images/title_bg.png');
+    this.load.image('title_logo', 'src/assets/images/title_logo.png');
 
     // Load the spritesheet for the falling leaves
     this.load.spritesheet('leaves', 'uploaded:image.png-d08449a4-20e7-4150-865b-e85467be9a71', { frameWidth: 105, frameHeight: 105, startFrame: 6, endFrame: 15 });
+    
+    // --- REMOVED ---
+    // The following asset is no longer needed as we are using the new 'title_bg.png'.
+    // this.load.image('universityBg', 'uploaded:image.png-723f1b5c-5518-48e7-a0f9-2562c82b8c60');
+
 
     // === EXTERNAL ASSETS (placeholders for your files) ===
     // You will need to make sure these files exist in your project's src folder.
